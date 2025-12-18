@@ -1,5 +1,6 @@
 import express from 'express';
-import { createEvent, getAllEvents } from '../controllers/eventController.js';
+// Add deleteEvent to the import list below:
+import { createEvent, getAllEvents, deleteEvent } from '../controllers/eventController.js'; 
 import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -9,5 +10,8 @@ router.get('/', getAllEvents);
 
 // Protected route: Only Admins can create events
 router.post('/', protect, adminOnly, createEvent);
+
+// Only Admins can delete events
+router.delete('/:id', protect, adminOnly, deleteEvent);
 
 export default router;
