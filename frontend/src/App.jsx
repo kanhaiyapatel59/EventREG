@@ -1,16 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <h1 className="text-4xl font-bold text-white">
-        frontend is Working 🚀
-      </h1>
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<h1 className="text-center mt-10">Welcome to Event System (Home)</h1>} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
