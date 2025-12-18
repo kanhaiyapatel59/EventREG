@@ -1,11 +1,19 @@
 import express from 'express';
-import { enrollInEvent, getUserEnrollments } from '../controllers/enrollmentController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import {
+    enrollInEvent,
+    getUserEnrollments,
+    getAllEnrollments
+} from '../controllers/enrollmentController.js';
+
+import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// All enrollment routes should be protected (user must be logged in)
+// User routes
 router.post('/:eventId', protect, enrollInEvent);
 router.get('/my-enrollments', protect, getUserEnrollments);
+
+// Admin route
+router.get('/admin/all', protect, adminOnly, getAllEnrollments);
 
 export default router;

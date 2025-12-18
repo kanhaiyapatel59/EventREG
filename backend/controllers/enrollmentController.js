@@ -4,7 +4,7 @@ import Event from '../models/Event.js';
 export const enrollInEvent = async (req, res) => {
     try {
         const { eventId } = req.params;
-        const userId = req.user.id; // From our 'protect' middleware
+        const userId = req.user.id; 
 
         // 1. Find the event
         const event = await Event.findById(eventId);
@@ -16,31 +16,60 @@ export const enrollInEvent = async (req, res) => {
         }
 
         // 3. Check if user is already enrolled
-        const existingEnrollment = await Enrollment.findOne({ user: userId, event: eventId });
+        const existingEnrollment = await Enrollment.findOne({
+            user: userId,
+            event: eventId
+        });
         if (existingEnrollment) {
             return res.status(400).json({ message: "You are already enrolled in this event" });
         }
 
         // 4. Create Enrollment
-        const newEnrollment = new Enrollment({ user: userId, event: eventId });
+        const newEnrollment = new Enrollment({
+            user: userId,
+            event: eventId
+        });
         await newEnrollment.save();
 
-        // 5. Increment the enrolledCount in the Event document
+        // 5. Increment enrolledCount
         event.enrolledCount += 1;
         await event.save();
 
-        res.status(201).json({ message: "Enrolled successfully!", enrollment: newEnrollment });
+        res.status(201).json({
+            message: "Enrolled successfully!",
+            enrollment: newEnrollment
+        });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
     }
 };
 
 export const getUserEnrollments = async (req, res) => {
     try {
-        // Find all enrollments for this user and "populate" the event details
-        const enrollments = await Enrollment.find({ user: req.user.id }).populate('event');
+        // Find all enrollments for logged-in user
+        const enrollments = await Enrollment
+            .find({ user: req.user.id })
+            .populate('event');
+
         res.status(200).json(enrollments);
     } catch (error) {
         res.status(500).json({ message: "Error fetching enrollments" });
+    }
+};
+
+// ✅ ADD THIS FUNCTION AT THE BOTTOM
+export const getAllEnrollments = async (req, res) => {
+    try {
+        // Find all enrollments with user & event details
+        const allEnrollments = await Enrollment.find()
+            .populate('user', 'name email')
+            .populate('event', 'title date');
+
+        res.status(200).json(allEnrollments);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching all enrollments" });
     }
 };

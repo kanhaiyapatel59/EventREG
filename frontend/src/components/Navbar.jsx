@@ -11,21 +11,61 @@ const Navbar = () => {
 
     return (
         <nav className="bg-white shadow-sm p-4 flex justify-between items-center px-10">
-            <Link to="/" className="text-xl font-bold text-indigo-600 italic">EventFlow</Link>
+            <Link to="/" className="text-xl font-bold text-indigo-600 italic">
+                EventFlow
+            </Link>
+
             <div className="space-x-6 flex items-center">
-                <Link to="/" className="text-gray-600 hover:text-indigo-600">Home</Link>
+                <Link to="/" className="text-gray-600 hover:text-indigo-600">
+                    Home
+                </Link>
+
                 {user ? (
                     <>
-                        <Link to="/dashboard" className="text-gray-600 hover:text-indigo-600">My Events</Link>
+                        <Link
+                            to="/dashboard"
+                            className="text-gray-600 hover:text-indigo-600"
+                        >
+                            My Events
+                        </Link>
+
+                        {/* ✅ UPDATED ADMIN LINKS */}
                         {user.role === 'admin' && (
-                            <Link to="/create-event" className="text-red-500 font-medium italic">Admin: Create</Link>
+                            <>
+                                <Link
+                                    to="/create-event"
+                                    className="text-red-500 font-medium italic"
+                                >
+                                    Create Event
+                                </Link>
+
+                                <Link
+                                    to="/admin-stats"
+                                    className="text-gray-600 hover:text-indigo-600"
+                                >
+                                    All Enrollments
+                                </Link>
+                            </>
                         )}
-                        <button onClick={logout} className="bg-gray-200 px-3 py-1 rounded text-sm">Logout</button>
+
+                        <button
+                            onClick={logout}
+                            className="bg-gray-200 px-3 py-1 rounded text-sm"
+                        >
+                            Logout
+                        </button>
                     </>
                 ) : (
                     <>
-                        <Link to="/login" className="text-gray-600">Login</Link>
-                        <Link to="/register" className="bg-indigo-600 text-white px-4 py-2 rounded">Sign Up</Link>
+                        <Link to="/login" className="text-gray-600">
+                            Login
+                        </Link>
+                        <Link
+                            to="/register"
+                            className="bg-indigo-600 text-white px-4 py-2 rounded"
+                        >
+                            Sign Up
+                        </Link>
                     </>
                 )}
             </div>

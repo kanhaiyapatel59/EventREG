@@ -5,7 +5,8 @@ import Login from './pages/Login';
 import CreateEvent from './pages/CreateEvent';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import AdminRoute from './components/AdminRoute'; // Import the guard
+import AdminRoute from './components/AdminRoute';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -16,17 +17,18 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        
+
         {/* Only Admins can reach this now */}
-        <Route 
-          path="/create-event" 
+        <Route
+          path="/create-event"
           element={
             <AdminRoute>
               <CreateEvent />
             </AdminRoute>
-          } 
+          }
         />
       </Routes>
+      <Route path="/admin-stats" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
     </Router>
   );
 }
