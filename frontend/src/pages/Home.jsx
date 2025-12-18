@@ -5,12 +5,16 @@ import { Link } from 'react-router-dom';
 const Home = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-    
+    const [processingId, setProcessingId] = useState(null); 
+
     const handleEnroll = async (eventId) => {
+        setProcessingId(eventId); 
+
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert("Please login to enroll in events!");
+                alert("Please login to enroll!");
+                setProcessingId(null);
                 return;
             }
 
@@ -25,10 +29,10 @@ const Home = () => {
             );
 
             alert(res.data.message);
-            // Refresh page to show updated capacity
             window.location.reload();
         } catch (err) {
             alert(err.response?.data?.message || "Enrollment failed");
+            setProcessingId(null);
         }
     };
 
@@ -52,7 +56,10 @@ const Home = () => {
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-6xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800">Upcoming Events</h1>
+                    <h1 className="text-3xl font-bold text-gray-800">
+                        Upcoming Events
+                    </h1>
+
                     <Link
                         to="/create-event"
                         className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
@@ -88,10 +95,17 @@ const Home = () => {
 
                                 {/* ✅ UPDATED BUTTON */}
                                 <button
+                                    disabled={processingId === event._id}
                                     onClick={() => handleEnroll(event._id)}
-                                    className="mt-4 w-full bg-indigo-600 text-white py-2 rounded font-medium hover:bg-indigo-700 transition"
+                                    className={`mt-4 w-full py-2 rounded font-medium transition ${
+                                        processingId === event._id
+                                            ? 'bg-gray-400'
+                                            : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                                    }`}
                                 >
-                                    Enroll Now
+                                    {processingId === event._id
+                                        ? 'Processing...'
+                                        : 'Enroll Now'}
                                 </button>
                             </div>
                         ))}

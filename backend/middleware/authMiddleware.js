@@ -8,9 +8,8 @@ export const protect = (req, res, next) => {
     }
 
     try {
-        // We use the same 'secret_key_123' used in authController
-        const decoded = jwt.verify(token, 'secret_key_123');
-        req.user = decoded; 
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
         next();
     } catch (error) {
         res.status(401).json({ message: "Token is not valid" });

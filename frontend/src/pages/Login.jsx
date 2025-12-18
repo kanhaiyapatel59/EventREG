@@ -13,7 +13,7 @@ const Login = () => {
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             alert("Login Successful!");
-            navigate('/'); // We'll build the home page later
+            navigate('/'); 
         } catch (err) {
             alert(err.response?.data?.message || "Login failed");
         }
