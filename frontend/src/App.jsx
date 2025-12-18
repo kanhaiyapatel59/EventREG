@@ -1,17 +1,31 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import CreateEvent from './pages/CreateEvent'; 
+import CreateEvent from './pages/CreateEvent';
 import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import AdminRoute from './components/AdminRoute'; // Import the guard
 
 function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/create-event" element={<CreateEvent />} />
-        <Route path="/" element={<h1 className="text-center mt-10">Home: Event List Coming Soon!</h1>} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        
+        {/* Only Admins can reach this now */}
+        <Route 
+          path="/create-event" 
+          element={
+            <AdminRoute>
+              <CreateEvent />
+            </AdminRoute>
+          } 
+        />
       </Routes>
     </Router>
   );
