@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
+import enrollmentRoutes from './routes/enrollmentRoutes.js';
 
 // Load variables from .env file
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(cors()); 
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
 
 
 // Connect to MongoDB
