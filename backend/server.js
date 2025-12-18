@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import authRoutes from './routes/authRoutes.js';
 
 // Load variables from .env file
 dotenv.config();
@@ -11,6 +12,7 @@ const app = express();
 // Middleware (Helper functions that process data)
 app.use(express.json()); 
 app.use(cors()); 
+app.use('/api/auth', authRoutes);
 
 // Connect to MongoDB
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/DigitalEvent';
