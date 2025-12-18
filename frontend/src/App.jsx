@@ -18,7 +18,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
 
-        {/* Only Admins can reach this now */}
+        {/* Only Admins can reach these */}
         <Route
           path="/create-event"
           element={
@@ -27,8 +27,17 @@ function App() {
             </AdminRoute>
           }
         />
-      </Routes>
-      <Route path="/admin-stats" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+        
+        {/* FIX: This was outside <Routes>, now it is inside */}
+        <Route 
+          path="/admin-stats" 
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          } 
+        />
+      </Routes> 
     </Router>
   );
 }

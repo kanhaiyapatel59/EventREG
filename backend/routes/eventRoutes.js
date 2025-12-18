@@ -1,5 +1,4 @@
 import express from 'express';
-// Add deleteEvent to the import list below:
 import { createEvent, getAllEvents, deleteEvent } from '../controllers/eventController.js'; 
 import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
