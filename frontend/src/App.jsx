@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import CreateEvent from './pages/CreateEvent'; 
 
 function App() {
   return (
@@ -8,7 +9,8 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<h1 className="text-center mt-10">Welcome to Event System (Home)</h1>} />
+        <Route path="/create-event" element={<CreateEvent />} />
+        <Route path="/" element={<h1 className="text-center mt-10">Home: Event List Coming Soon!</h1>} />
       </Routes>
     </Router>
   );
