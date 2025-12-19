@@ -1,16 +1,25 @@
 import express from 'express';
-import { createEvent, getAllEvents, deleteEvent } from '../controllers/eventController.js'; 
+import {
+    createEvent,
+    getAllEvents,
+    deleteEvent,
+    getAdminStats
+} from '../controllers/eventController.js';
+
 import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Public route: Anyone can see events
-router.get('/', getAllEvents);
+/**
+ * PUBLIC
+ */
+router.get('/', getAllEvents);              
 
-// Protected route: Only Admins can create events
+/**
+ * ADMIN
+ */
+router.get('/admin/stats', protect, adminOnly, getAdminStats); 
 router.post('/', protect, adminOnly, createEvent);
-
-// Only Admins can delete events
 router.delete('/:id', protect, adminOnly, deleteEvent);
 
 export default router;

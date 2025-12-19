@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
 
         {/* Only Admins can reach these */}
         <Route

@@ -1,72 +1,52 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 
 const AdminDashboard = () => {
-    const [enrollments, setEnrollments] = useState([]);
-    const [events, setEvents] = useState([]);
-
-    const fetchData = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            
-            // Fetch both enrollments and events
-            const enrollRes = await axios.get('http://localhost:5001/api/enrollments/admin/all', config);
-            const eventRes = await axios.get('http://localhost:5001/api/events');
-            
-            setEnrollments(enrollRes.data);
-            setEvents(eventRes.data);
-        } catch (err) {
-            alert("Error fetching admin data");
-        }
-    };
+    const [stats, setStats] = useState(null);
 
     useEffect(() => {
-        fetchData();
+        const fetchStats = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                // Absolute URL to prevent 404
+                const res = await axios.get('http://localhost:5001/api/events/admin/stats', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setStats(res.data);
+            } catch (err) {
+                console.error("Dashboard error", err);
+            }
+        };
+        fetchStats();
     }, []);
 
-    const handleDeleteEvent = async (eventId) => {
-        if (!window.confirm("Are you sure? This will also remove all enrollments for this event.")) return;
-
-        try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5001/api/events/${eventId}`, config);
-            alert("Event deleted");
-            fetchData(); // Refresh the lists
-        } catch (err) {
-            alert("Delete failed");
-        }
-    };
+    if (!stats) return <div className="p-20 text-center text-white font-black bg-[#0F172A] min-h-screen">COMPILING STATS...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-100 p-8 space-y-10">
-            {/* Section 1: Event Management */}
-            <section>
-                <h2 className="text-2xl font-bold mb-4 text-gray-800">Manage Events</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {events.map(event => (
-                        <div key={event._id} className="bg-white p-4 rounded shadow flex justify-between items-center">
-                            <div>
-                                <p className="font-bold">{event.title}</p>
-                                <p className="text-sm text-gray-500">{event.enrolledCount} Participants</p>
-                            </div>
-                            <button 
-                                onClick={() => handleDeleteEvent(event._id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
-                            >
-                                Delete
-                            </button>
-                        </div>
+        <div className="min-h-screen bg-[#0F172A] text-white p-6 md:p-12">
+            <div className="max-w-7xl mx-auto">
+                <header className="mb-12 border-b border-slate-800 pb-8">
+                    <h1 className="text-5xl font-black italic tracking-tighter uppercase">Platform <span className="text-indigo-500">Analytics</span></h1>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                    {[
+                        { label: 'Active Events', value: stats.totalEvents, color: 'border-indigo-500' },
+                        { label: 'Total Enrolled', value: stats.totalEnrolled, color: 'border-cyan-400' },
+                        { label: 'Waitlist Count', value: stats.totalWaitlisted, color: 'border-orange-500' },
+                        { label: 'Occupancy', value: `${stats.occupancyRate}%`, color: 'border-emerald-500' }
+                    ].map((s, i) => (
+                        <motion.div initial={{opacity:0, scale:0.9}} animate={{opacity:1, scale:1}} key={s.label}
+                            className={`bg-slate-800/40 p-10 rounded-[2.5rem] border-t-8 ${s.color} shadow-2xl backdrop-blur-md`}>
+                            <p className="text-slate-500 text-xs font-black uppercase tracking-[0.2em]">{s.label}</p>
+                            <h2 className="text-5xl font-black mt-4">{s.value}</h2>
+                        </motion.div>
                     ))}
                 </div>
-            </section>
-
-            {/* Section 2: Master Enrollment Table (Keep your existing table code here) */}
-            <section>
-                <h2 className="text-2xl font-bold mb-4 text-gray-800">Enrollment Details</h2>
-                {/* ... Paste the <table> code from Step 12 here ... */}
-            </section>
+                
+                {/* ... rest of your UI code remains same */}
+            </div>
         </div>
     );
 };
